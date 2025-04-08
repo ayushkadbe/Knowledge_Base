@@ -9,6 +9,13 @@ git commit -m "initial"
 git branch -M main
 git remote add origin https://ayushkadbe:token@github.com/ayushkadbe/linkedIn_data_scrapper
 git push -f origin main
+========================
+VIRTUAL ENV
+
+python -m ./venv
+python -m venv myvenv
+myvenv\Scripts\activate
+If above doesn't work use command: "Set-ExecutionPolicy Unrestricted -Scope Process"
 
 
 ========================
