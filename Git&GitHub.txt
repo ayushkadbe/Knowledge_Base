@@ -1,3 +1,17 @@
+CLONE REPO
+
+create a repo on github
+create a fine-grade token from Personal-access token in github
+create a folder on local host
+git init
+git add .
+git commit -m "initial"
+git branch -M main
+git remote add origin https://ayushkadbe:token@github.com/ayushkadbe/linkedIn_data_scrapper
+git push -f origin main
+
+
+========================
 git --help
 
 Open Terminal in Project
