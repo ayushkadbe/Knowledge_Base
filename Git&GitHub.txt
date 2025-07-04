@@ -9,6 +9,10 @@ git commit -m "initial"
 git branch -M main
 git remote add origin https://ayushkadbe:token@github.com/ayushkadbe/linkedIn_data_scrapper
 git push -f origin main
+
+OR
+git clone https://ayushkadbe:token@github.com/ayushkadbe/MailPy_AutoRouter.git
+Go to new folder created
 ========================
 VIRTUAL ENV
 
