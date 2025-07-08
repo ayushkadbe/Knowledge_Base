@@ -1,0 +1,137 @@
+EXCEL DATA ANALYSIS
+==============
+
+1.) IF Conditions
+
+2.) Query Function
+
+3.) Vlookup
+
+4.) ARRAYFORMULA etc.
+
+Fetch data
+=QUERY('Data Set'!A:J, "Select * Where D < 100 Order by B Desc", 1)
+
+=QUERY('Data Set'!A:J, "Select * Where D < 100 and D is not null Order by B Desc", 1)
+
+=VLOOKUP(B2:B,'NSE/BSE Code'!A3:C,2,0)
+CTRL+SHIFT+ENTER
+
+To apply to whole row
+=ArrayFormula(VLOOKUP(B2:B,'NSE/BSE Code'!A3:C,2,0))
+
+If do avoid empty cells
+=ArrayFormula(If(B2:B<>"", VLOOKUP(B2:B, 'NSE/BSE Code'!A4:C, 2,0),""))
+
+
+======STATUS===========
+=QUERY('Data Set'!A:J, "Select * Where D < 100 and D is not null Order by B Desc", 1)
+
+=ArrayFormula(IF(A2:A<>"",VLOOKUP(A2:A, 'NSE/BSE Code'!A4:C, 2,0),""))
+
+=ArrayFormula(IF (A2:A<>"", VLOOKUP(A2:A, 'NSE/BSE Code'!A4:C,3,0),""))
+
+=ARRAYFORMULA(If (F2:F<>"", IF(F2:F*100 > 30, "Yes", "No"),"")
+)
+
+=ARRAYFORMULA(If (H2:H<>"",IF(H2:H*100 < 30, "Yes", "No"),"")
+)
+
+=ArrayFormula(IF(D2:D <65,IF(M2:M="No",If(N2:N="No","Good Stock",""),""),""))
+=ARRAYFORMULA(If (I2:I<>"",IF(I2:I < 30, "Yes", "No"),"")
+)
+
+======Good Stock===========
+=QUERY(Status!A1:O, "SELECT * WHERE O='Good Stock'", 1)
+==========================
+report
+
+Task 1 : First Create a New Sub Sheet & Fetch all the Data from the Sheet called "Data Set" where Data from the PE Ratio is not Blank & PE Ratio < 100 using Query Function  and sort the data by Descending of Market Cap Amount.
+
+
+
+
+Task 2 :  Now Create 2 Columns of Industry & NSE/BSE Code & Fetch Data from the Second Sheet with Vlookup, Make sure the Vlookup Formula is used with "ARRAYFORMULA" meaning formula will be written only once but will be applicable throughout the column,
+
+
+
+Also make sure the Formula of Vlookup will be applied only until when data is there in the column, handle this with IF CONDITIONS in that same formula.
+
+
+
+Task 3 : Now Create 2 More Columns at the End with the Heading "Bear Mode 1" & "Bear Mode 2"
+
+
+
+Bear Mode 1 Condition : Use IF Condition to print "Yes" if % Change from 52 Week High > 30 else "No"
+
+
+
+Bear Mode Condition 2 : Use IF Condition to print "Yes" if % Change from 52 Week Low < 30 else "No"
+
+
+
+
+
+Stock Status : Now Create a Column named "Stock Status" & then apply multiple IF Conditions to check if PE Ratio <65, Bear Mode 1 & 2 = "No" then Print "Good Stock" in the column else "".
+
+
+
+
+
+Task 4 : Now create a new sheet & fetch all Data where Stock Status = 'Good Stock' which will be your Final Organized Data Source so Create Proper Formatting to this Sheet like the Data Source Sheet & also add Appropriate Conditional Formatting Colour Scales.
+
+
+
+Task 5 : Create a Pivot Table Report as Follows :
+
+Industry wise Total Count of Companies
+Industry wise Average Market Cap
+Industry wise sum of Market Cap
+
+
+( The Report should have proper formatting with proper heading, slicers & Color formatting with color scale or Conditional Formatting so that it looks like a professional report & not just a simple pivot table)
+
+
+
+
+Task 2 :  Now Create 2 Columns of Industry & NSE/BSE Code & Fetch Data from the Second Sheet with Vlookup, Make sure the Vlookup Formula is used with "ARRAYFORMULA" meaning formula will be written only once but will be applicable throughout the column,
+
+
+
+Also make sure the Formula of Vlookup will be applied only until when data is there in the column, handle this with IF CONDITIONS in that same formula.
+
+
+
+Task 3 : Now Create 2 More Columns at the End with the Heading "Bear Mode 1" & "Bear Mode 2"
+
+
+
+Bear Mode 1 Condition : Use IF Condition to print "Yes" if % Change from 52 Week High > 30 else "No"
+
+
+
+Bear Mode Condition 2 : Use IF Condition to print "Yes" if % Change from 52 Week Low < 30 else "No"
+
+
+
+
+
+Stock Status : Now Create a Column named "Stock Status" & then apply multiple IF Conditions to check if PE Ratio <65, Bear Mode 1 & 2 = "No" then Print "Good Stock" in the column else "".
+
+
+
+
+
+Task 4 : Now create a new sheet & fetch all Data where Stock Status = 'Good Stock' which will be your Final Organized Data Source so Create Proper Formatting to this Sheet like the Data Source Sheet & also add Appropriate Conditional Formatting Colour Scales.
+
+
+
+Task 5 : Create a Pivot Table Report as Follows :
+
+Industry wise Total Count of Companies
+Industry wise Average Market Cap
+Industry wise sum of Market Cap
+
+
+( The Report should have proper formatting with proper heading, slicers & Color formatting with color scale or Conditional Formatting so that it looks like a professional report & not just a simple pivot table)
