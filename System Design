@@ -1,0 +1,639 @@
+# Complete System Design Tutorial — source: https://youtu.be/F2FmTdLtb_4?si=VfSstFcD_B_drzJ-
+---
+
+## 1. What This System Design Tutorial Is About
+
+This complete system design tutorial covers **scalability, reliability, data handling, and high-level architecture**, with **clear explanations, real-world examples, and practical strategies**.
+It teaches the **core concepts you need to know for a system design interview** and is designed as a **complete crash course** for job interviews.
+
+A system design interview does **not focus heavily on coding**. Interviewers do not want to see you write actual code. Instead, they want to understand **how you glue an entire system together**, how different components interact, and how decisions are made at scale.
+That is exactly what this tutorial focuses on.
+
+Before designing large-scale distributed systems, it is important to understand the **high-level architecture of an individual computer** and how different components work together to execute code.
+
+---
+
+## 2. How a Computer Executes Code (Foundational Architecture)
+
+### 2.1 Binary Data and Units of Storage
+
+Computers function through a **layered system**, with each layer optimized for specific tasks.
+At the deepest level, computers understand only **binary values — zeros and ones**. These are represented as **bits**.
+
+* A **bit** is the smallest data unit in computing and can be either 0 or 1.
+* A **byte** consists of 8 bits and is used to represent a single character, such as a letter or number.
+
+From bytes, data storage expands into:
+
+* Kilobytes
+* Megabytes
+* Gigabytes
+* Terabytes
+
+---
+
+### 2.2 Disk Storage (Persistent Data Layer)
+
+To store data, computers use **disk storage**, which holds primary data. Disk storage can be either:
+
+* HDD (Hard Disk Drive)
+* SSD (Solid State Drive)
+
+Disk storage is **non-volatile**, meaning it maintains data even when the computer is turned off or restarted.
+It contains:
+
+* The operating system
+* Installed applications
+* All user files
+
+In terms of size, disks typically range from **hundreds of gigabytes to multiple terabytes**.
+
+SSDs are more expensive but offer **significantly faster data retrieval** than HDDs.
+For example:
+
+* SSD read speed: ~500 MB/s to 3,500 MB/s
+* HDD read speed: ~80 to 160 MB/s
+
+---
+
+### 2.3 RAM (Random Access Memory)
+
+The next immediate access point after disk storage is **RAM**.
+
+RAM serves as the **primary active data holder**. It stores:
+
+* Variables
+* Data structures
+* Application data currently in use
+* Runtime stack
+* Intermediate computations
+
+When a program runs, its data is stored in RAM because RAM allows **very fast read and write access**.
+
+RAM is **volatile memory**, meaning it requires power to retain its contents. If the computer restarts, data in RAM is lost.
+
+RAM size varies:
+
+* Consumer devices: a few gigabytes
+* High-end servers: hundreds of gigabytes
+
+RAM read/write speeds often exceed **5,000 MB/s**, which is faster than even the fastest SSDs.
+
+---
+
+### 2.4 CPU Cache (Ultra-Fast Memory Layer)
+
+Sometimes even RAM is not fast enough. This is where **CPU cache** comes in.
+
+Cache memory is:
+
+* Smaller than RAM (measured in megabytes)
+* Faster than RAM (access times in nanoseconds)
+
+Cache levels:
+
+* L1 cache (fastest)
+* L2 cache
+* L3 cache
+
+The CPU checks for data in this order:
+
+1. L1 cache
+2. L2 cache
+3. L3 cache
+4. RAM
+
+The purpose of cache is to **reduce average data access time** by storing frequently used data close to the CPU, improving performance.
+
+---
+
+### 2.5 CPU (Central Processing Unit)
+
+The CPU is the **brain of the computer**. It:
+
+* Fetches instructions
+* Decodes them
+* Executes them
+
+When you run code, the CPU performs the operations defined in that program.
+However, code written in high-level languages like **Java, C++, or Python** cannot be executed directly.
+
+Before execution:
+
+* Code must be compiled into **machine code**
+* A **compiler** performs this translation
+
+Once compiled, the CPU can:
+
+* Execute instructions
+* Read and write data from cache, RAM, and disk
+
+---
+
+### 2.6 Motherboard (System Connector)
+
+Finally, the **motherboard** connects all components together.
+It provides the pathways that allow data to flow between:
+
+* CPU
+* RAM
+* Disk
+* Cache
+
+---
+
+## 3. High-Level Architecture of a Production-Ready Application
+
+### 3.1 CI/CD Pipeline
+
+The first major component of a production system is the **CI/CD pipeline**, which stands for:
+
+* Continuous Integration
+* Continuous Deployment
+
+This pipeline ensures that code moves:
+
+* From the repository
+* Through tests and checks
+* Into production
+
+All of this happens **without manual intervention**.
+Common tools include:
+
+* Jenkins
+* GitHub Actions
+
+---
+
+### 3.2 Handling User Traffic
+
+Once the application is in production, it must handle **large volumes of user requests**.
+
+This is managed using:
+
+* Load balancers
+* Reverse proxies (e.g., Nginx)
+
+These components:
+
+* Distribute requests evenly across servers
+* Handle traffic spikes
+* Maintain smooth user experience
+
+---
+
+### 3.3 Data Storage & Inter-Service Communication
+
+Production servers also need to store data. Often, data storage:
+
+* Runs on external storage servers
+* Is connected over a network
+* Is not hosted on the same machine as the app
+
+Servers may also communicate with **many other services**, not just one.
+
+---
+
+### 3.4 Logging, Monitoring, and Alerting
+
+To ensure smooth operation, systems rely on **logging and monitoring**.
+
+* Logs are usually stored on **external services**
+* Backend tools like **PM2** handle logging and monitoring
+* Frontend platforms like **Sentry** capture and report errors in real time
+
+When anomalies or failures are detected:
+
+1. Alerting services are triggered
+2. Notifications are sent (e.g., payment failed)
+3. Alerts are often integrated into tools like **Slack**
+
+Developers may have a dedicated Slack channel where alerts appear instantly, allowing immediate action.
+
+---
+
+### 3.5 Debugging and Hotfixes
+
+When issues occur:
+
+1. Logs are the **first point of investigation**
+2. Developers search for patterns or anomalies
+3. Issues are **never debugged directly in production**
+4. Problems are reproduced in staging or test environments
+5. Debugging tools inspect the running application
+6. A **hotfix** is rolled out as a temporary patch
+7. A permanent fix follows later
+
+---
+
+## 4. Core Principles of System Design
+
+### 4.1 What Makes a Good System Design
+
+Good system design focuses on:
+
+* **Scalability**: system growth with users
+* **Maintainability**: future developers can understand and extend it
+* **Efficiency**: optimal use of resources
+
+Good design also means **planning for failure**, ensuring the system performs well not only during normal operation but also when things go wrong.
+
+---
+
+### 4.2 Three Core System Functions
+
+At the heart of system design are three elements:
+
+#### Moving Data
+
+Ensuring data flows smoothly between:
+
+* Users and servers
+* Services
+* Databases
+  Optimized for speed and security.
+
+#### Storing Data
+
+Not just choosing SQL vs NoSQL, but:
+
+* Access patterns
+* Indexing strategies
+* Backup solutions
+  Ensuring data is secure and available.
+
+#### Transforming Data
+
+Converting raw data into meaningful information:
+
+* Aggregating logs
+* Processing user input
+* Formatting outputs
+
+---
+
+## 5. CAP Theorem (Brewer’s Theorem)
+
+CAP theorem states that a distributed system can guarantee only **two out of three** properties:
+
+* Consistency
+
+* Availability
+
+* Partition tolerance
+
+* **Consistency**: all nodes have the same data at the same time
+
+* **Availability**: system always responds
+
+* **Partition tolerance**: system works despite network failures
+
+For example:
+
+* Banking systems prioritize consistency and partition tolerance
+* Availability may be temporarily compromised
+
+Every design decision involves trade-offs.
+
+---
+
+## 6. Availability, Reliability, and Performance Metrics
+
+### 6.1 Availability
+
+Availability measures whether a system is operational when users need it.
+
+Examples:
+
+* 99.9% availability → ~8.76 hours downtime/year
+* 99.99% availability → ~5 minutes downtime/year
+
+---
+
+### 6.2 SLOs and SLAs
+
+* **SLOs** define internal performance goals
+* **SLAs** are contractual guarantees to customers
+* Falling below SLA may require refunds or compensation
+
+---
+
+### 6.3 Reliability Concepts
+
+* Reliability: correct and consistent operation
+* Fault tolerance: handling failures
+* Redundancy: backups ready to take over
+
+---
+
+### 6.4 Throughput vs Latency
+
+* Throughput: amount of work per time
+
+  * Server throughput (requests/second)
+  * Database throughput (queries/second)
+  * Data throughput (bytes/second)
+* Latency: time taken for a single request
+
+Optimizing one often impacts the other.
+
+---
+
+## 7. Networking Fundamentals
+
+### 7.1 IP Addresses and Packets
+
+* IPv4: 32-bit (~4 billion addresses)
+* IPv6: 128-bit (vastly larger)
+
+Devices communicate using **packets**, each containing IP headers with sender and receiver addresses.
+
+---
+
+### 7.2 Transport Layer: TCP vs UDP
+
+* **TCP**:
+
+  * Reliable
+  * Ordered delivery
+  * Three-way handshake
+* **UDP**:
+
+  * Faster
+  * No delivery guarantee
+  * Used for streaming and calls
+
+---
+
+### 7.3 DNS
+
+DNS translates human-readable domain names into IP addresses.
+It is governed by **ICANN**, and uses records like:
+
+* A records (IPv4)
+* AAAA records (IPv6)
+
+---
+
+### 7.4 Ports, Firewalls, and IP Types
+
+* Public vs private IPs
+* Static vs dynamic IPs
+* Firewalls control traffic
+* Ports identify services (e.g., 80 HTTP, 22 SSH)
+
+---
+
+## 8. Application Layer Protocols
+
+### 8.1 HTTP
+
+HTTP is:
+
+* Built on TCP/IP
+* Stateless
+* Request–response based
+
+Requests include:
+
+* Headers (URL, method)
+* Body (data)
+
+Responses include:
+
+* Status codes:
+
+  * 2xx: success
+  * 3xx: redirection
+  * 4xx: client error
+  * 5xx: server error
+
+Methods:
+
+* GET: fetch data
+* POST: create data
+* PUT / PATCH: update data
+* DELETE: remove data
+
+---
+
+### 8.2 WebSockets
+
+WebSockets provide:
+
+* Two-way communication
+* Persistent connections
+  Used for chat apps, live sports, stock feeds.
+
+---
+
+### 8.3 Email, File, and Messaging Protocols
+
+* SMTP: send email
+* IMAP / POP3: retrieve email
+* FTP: file transfers
+* SSH: secure remote access
+* WebRTC: real-time browser communication
+* MQTT: lightweight IoT messaging
+* AMQP: enterprise messaging (RabbitMQ)
+
+---
+
+### 8.4 RPC
+
+RPC allows a program to execute code on another machine as if it were local.
+Many protocols internally use RPC mechanisms.
+
+---
+
+## 9. API Design
+
+### 9.1 CRUD Operations
+
+CRUD stands for:
+
+* Create
+* Read
+* Update
+* Delete
+
+Example (e-commerce):
+
+* POST /api/products → create product
+* GET /api/products → fetch products
+* GET /api/products/{id} → fetch single product
+* PUT/PATCH /api/products/{id} → update product
+* DELETE /api/products/{id} → delete product
+
+---
+
+### 9.2 API Paradigms
+
+* REST:
+
+  * Stateless
+  * Uses HTTP verbs
+  * JSON-based
+  * Can over/under-fetch
+* GraphQL:
+
+  * Client defines required data
+  * Always HTTP 200
+  * Complex queries affect performance
+* gRPC:
+
+  * Built on HTTP/2
+  * Uses Protocol Buffers
+  * Efficient but less readable
+
+---
+
+### 9.3 API Best Practices
+
+* Pagination
+* Filtering
+* Idempotent GET requests
+* Versioning
+* Rate limiting
+* CORS configuration
+
+---
+
+## 10. Caching and CDN
+
+### 10.1 Types of Caching
+
+* Browser caching
+* Server-side caching
+* Database caching
+* CDN caching
+
+Includes:
+
+* Cache hits
+* Cache misses
+* Cache eviction policies (LRU, FIFO, LFU)
+
+---
+
+### 10.2 CDN
+
+CDNs distribute content geographically:
+
+* Pull-based CDN
+* Push-based CDN
+
+Benefits:
+
+* Reduced latency
+* Higher availability
+* Better security
+* Reduced origin server load
+
+---
+
+## 11. Proxies and Load Balancers
+
+### 11.1 Proxy Types
+
+* Forward proxy
+* Reverse proxy
+* Open, transparent, anonymous, elite proxies
+
+---
+
+### 11.2 Forward Proxy Use Cases
+
+* Anonymity
+* Internet usage control
+* Caching
+* Instagram automation
+
+---
+
+### 11.3 Reverse Proxy Use Cases
+
+* Load balancing
+* CDN
+* Web application firewall
+* SSL offloading
+
+---
+
+### 11.4 Load Balancing Algorithms
+
+* Round robin
+* Least connections
+* Least response time
+* IP hashing
+* Weighted algorithms
+* Geographic routing
+* Consistent hashing
+
+---
+
+### 11.5 Load Balancer Failure Handling
+
+* Redundant load balancers
+* Failover
+* Health checks
+* Auto-scaling
+* DNS failover
+
+---
+
+## 12. Databases in System Design
+
+### 12.1 Database Types
+
+* Relational (PostgreSQL, MySQL)
+* NoSQL (MongoDB, Cassandra)
+* In-memory (Redis, Memcached)
+
+---
+
+### 12.2 ACID Properties
+
+* Atomicity
+* Consistency
+* Isolation
+* Durability
+
+---
+
+### 12.3 Scaling Databases
+
+* Vertical scaling
+* Horizontal scaling
+
+Includes:
+
+* Sharding (range, directory, geographic)
+* Replication (master-slave, master-master)
+
+---
+
+### 12.4 Performance Optimization
+
+* Caching
+* Indexing
+* Query optimization
+
+---
+
+## 13. Final Reminder
+
+Design decisions always involve **trade-offs**.
+CAP theorem applies everywhere.
+The goal is not perfection, but the **best design for the given use case**.
+
+---
+
+If you want next:
+
+* Interview answer framing
+* Whiteboard explanation version
+* Diagram-ready version
+* Or converting this into a **Notion / Obsidian knowledge base**
+
+Tell me what format you want next.
