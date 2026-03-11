@@ -50,7 +50,16 @@ COMMIT unstaged work on current branch to a new branch
 git checkout -b your-new-branch
 git add <files>
 git commit -m <message>
- 
+------------------
+Fetch another branch of same project
+
+assuming current branch is dev, and you want to fetch from main branch.
+
+Key Commands
+git fetch origin: Updates your local knowledge of remote branches.
+git merge origin/main: Merges remote main into current branch.
+git pull origin main: Combines fetch and merge.
+
 ------------------
 Push another branch of same project
 
@@ -178,5 +187,6 @@ git push (push these changes to the Parent repository)
 
 
 ============================================================
+
 
 
